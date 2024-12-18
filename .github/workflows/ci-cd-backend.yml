@@ -1,0 +1,44 @@
+name: CI/CD Backend
+
+on:
+  push:
+    branches:
+      - main  # Виконуємо пайплайн на основній гілці
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Клонуємо репозиторій
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # 2. Логін до Docker Hub
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+    # 3. Створення Docker-образу
+    - name: Build and push Docker image
+      run: |
+        docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/backend:latest ./backend_rds
+        docker push ${{ secrets.DOCKER_HUB_USERNAME }}/backend:latest
+
+    # 4. Деплой на EC2
+    - name: Deploy to EC2
+      env:
+        PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+        HOST: ${{ secrets.EC2_HOST }}
+        USER: ec2-user
+      run: |
+        echo "$PRIVATE_KEY" > private_key.pem
+        chmod 600 private_key.pem
+        ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST << 'EOF'
+          docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/backend:latest
+          cd /home/ec2-user/
+          docker-compose down
+          docker-compose up -d
+        EOF
