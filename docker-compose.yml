@@ -33,7 +33,7 @@ services:
       DB_PASSWORD: mypassword
       DB_HOST: postgres
       DB_PORT: 5432
-      CORS_ALLOWED_ORIGINS: "http://du5i2wrrtu2h.cloudfront.net,http://16.171.193.52"
+      CORS_ALLOWED_ORIGINS: "https://du5i2wwrrtu2h.cloudfront.net"
     depends_on:
       postgres:
         condition: service_healthy
@@ -49,7 +49,7 @@ services:
     environment:
       REDIS_HOST: redis_db
       REDIS_PORT: 6379
-      CORS_ALLOWED_ORIGINS: "http://du5i2wrrtu2h.cloudfront.net,http://16.171.193.52"
+      CORS_ALLOWED_ORIGINS: "https://du5i2wwrrtu2h.cloudfront.net"
     depends_on:
       redis:
         condition: service_healthy
