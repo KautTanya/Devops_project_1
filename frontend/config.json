@@ -1,5 +1,5 @@
 {
-    "BACKEND_RDS_URL": "https://du5i2wwrrtu2h.cloudfront.net/test_rds_connection/",
-    "BACKEND_REDIS_URL": "https://du5i2wwrrtu2h.cloudfront.net/test_redis_connection/"
+    "BACKEND_RDS_URL": "https://13.51.79.228:8000/test_connection/",
+    "BACKEND_REDIS_URL": "https://13.51.79.228:8001/test_connection/"
   }
   
