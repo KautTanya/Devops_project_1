@@ -34,20 +34,12 @@ jobs:
         HOST: ${{ secrets.EC2_HOST }}
         USER: ec2-user
       run: |
-        ssh -i <(echo "$PRIVATE_KEY") -o StrictHostKeyChecking=no $USER@$HOST << 'EOF'
-          # Перехід у папку проекту
-          cd /home/ec2-user
-          
-          # Оновлення репозиторію
-          git pull origin main
-          
-          # Витягування нового Docker-образу
+        echo "$PRIVATE_KEY" > private_key.pem
+        chmod 400 private_key.pem  # Змінено права доступу
+        ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST << 'EOF'
           docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/backend:latest
-          
-          # Перезапуск контейнерів
+          cd /home/ec2-user/
           docker-compose down
           docker-compose up -d
-
-          # Перевірка стану контейнерів
-          docker ps
         EOF
+
