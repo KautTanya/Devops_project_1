@@ -12,11 +12,6 @@ services:
       - "5432:5432"
     networks:
       - my_network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U myuser -d mydb"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -63,11 +58,6 @@ services:
       - "6379:6379"
     networks:
       - my_network
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
 
 networks:
   my_network:
