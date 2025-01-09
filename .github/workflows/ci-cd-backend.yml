@@ -38,7 +38,7 @@ jobs:
         chmod 400 private_key.pem  # Змінено права доступу
         ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST << 'EOF'
           docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/backend:latest
-          cd /home/ec2-user/
+          cd /home/ec2-user/Devops_project_1/
           docker-compose down
           docker-compose up -d
         EOF
